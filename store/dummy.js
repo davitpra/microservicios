@@ -6,7 +6,7 @@ const db = {
 
 //nos trae toda la informacion de la tabla
 async function list (tabla) {
-    return db[tabla];
+    return db[tabla] || []
 }
 
 
@@ -31,9 +31,22 @@ async function remove (tabla, id) {
     return true;
 }
 
+async function query (tabla, q) {
+    //nos trae toda la tabla
+    let col = await list(tabla);
+    // encontramos el identificador de la querry
+    let keys = Object.keys(q)
+    // escogemos el primer objeto del array
+    let key = keys[0]
+
+    // nos filtra dependiendo la query devuelve el primero
+    return col.filter(item => item[key] === q[key])[0] || null;
+}
+
 module.exports= {
     list,
     get,
     upsert,
-    remove
+    remove,
+    query
 }

@@ -1,3 +1,5 @@
+const auth = require('../../../auth')
+
 const TABLA = 'auth';
 
 // exportamos como si fuera una funcion que le inyectan el store. 
@@ -9,6 +11,19 @@ module.exports = function (injectedStore) {
         store = require('../../../store/dummy')
     }
 
+    // para el login
+    async function login(username,password){
+        // definimos la data filtrando por el username 
+        const data=await store.query(TABLA, { username })
+
+        // comparamos que sea el mismo password
+        if (data.password===password) {
+            // devolvemos el token firmado
+            return auth.sign(data)
+        } else {
+            throw new Error('Informacion invalida')
+        }
+    } 
     //para hacer registro del usuario
     function upsert(data){
         // creamos un id con el ide del usuario
@@ -29,6 +44,7 @@ module.exports = function (injectedStore) {
     }
 
     return{
-        upsert
+        upsert,
+        login
     }
 }
