@@ -10,6 +10,7 @@
   "author": "Dbyte <j.david.prado1716@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
     "nanoid": "^2.1.7",

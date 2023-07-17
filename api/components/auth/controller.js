@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const auth = require('../../../auth')
 
 const TABLA = 'auth';
@@ -16,8 +17,8 @@ module.exports = function (injectedStore) {
         // definimos la data filtrando por el username 
         const data=await store.query(TABLA, { username })
 
-        // comparamos que sea el mismo password
-        if (data.password===password) {
+        // comparamos que sea el mismo password con bcrypt
+        if (bcrypt.compare(password, data.password)) {
             // devolvemos el token firmado
             return auth.sign(data)
         } else {
@@ -25,7 +26,7 @@ module.exports = function (injectedStore) {
         }
     } 
     //para hacer registro del usuario
-    function upsert(data){
+    async function upsert(data){
         // creamos un id con el ide del usuario
         const authData={ 
            id:data.id,
@@ -35,9 +36,9 @@ module.exports = function (injectedStore) {
         if(data.username){
             authData.username=data.username;
         }
-        //agregamos el password del usuario
+        //agregamos el password del usuario hasheado
         if(data.password){
-            authData.password=data.password
+            authData.password= await bcrypt.hash(data.password, 5)
         }
         
         return store.upsert(TABLA,authData)
