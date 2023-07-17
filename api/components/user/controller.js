@@ -1,5 +1,6 @@
 //para generar id
 const nanoid = require('nanoid');
+const auth = require('../auth')
 
 const TABLA = 'user';
 
@@ -20,15 +21,28 @@ module.exports = function (injectedStore) {
         return store.get(TABLA, id);
     }
 
-    function upsert(body) {
+    async function upsert(body) {
+        // creamos un objeto user
         const user = {
-            name: body.name
+            name: body.name,
+            username: body.username
         }
 
+        //si nos trae el id anadimos al objeto
         if (body.id) {
             user.id = body.id;
+        // si no le damos un id
         } else {
             user.id = nanoid();
+        }
+        // verificamos si tiene un password y conside con username
+        if(body.password||body.username){
+            //el password lo guardamos solo en auth.
+            await auth.upsert({
+                id:user.id,
+                username:user.username,
+                password:body.password,
+            })
         }
 
         return store.upsert(TABLA, user);
