@@ -1,27 +1,27 @@
 const db = {
     'user': [
-        { id: 1, name: 'Carlos' },
+        { id: '1', name: 'Carlos' },
     ],
 }
 
 //nos trae toda la informacion de la tabla
-function list (tabla) {
+async function list (tabla) {
     return db[tabla];
 }
 
 
-function get (tabla, id)  {
+async function get (tabla, id)  {
     //nos trae toda la tabla
-    let col = list(tabla);
+    let col = await list(tabla);
     // nos filtra dependiendo el id y devuelve el primero
     return col.filter(item => item.id === id)[0] || null;
 }
 
-function upsert (tabla, data) {
+async function upsert (tabla, data) {
     db[collection].push(data);
 }
 
-function remove (tabla, id) {
+async function remove (tabla, id) {
     return true;
 }
 
