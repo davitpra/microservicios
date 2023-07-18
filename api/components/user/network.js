@@ -22,7 +22,7 @@ function list (req, res, next) {
         .catch(next)
 }
 
-function get (req, res) {
+function get (req, res, next) {
     controller.get(req.params.id)
     .then((user)=> {
         response.success(req, res, user, 200)
@@ -32,7 +32,7 @@ function get (req, res) {
 }
 
 
-function upsert (req, res) {
+function upsert (req, res, next) {
     controller.upsert(req.body)
     .then((user)=> {
         response.success(req, res, user, 201)

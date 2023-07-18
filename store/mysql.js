@@ -7,7 +7,6 @@ const dbconf = {
     user: config.mysql.user,
     password: config.mysql.password,
     database: config.mysql.database,
-    address:'127.0.0.1'
 };
 
 let connection;
@@ -58,14 +57,15 @@ function get(table, id) {
 }
 
 // funcion para anadir a la db
-function insert(table, data) {
-    return new Promise((resolve, reject) => {
-        connection.query(`INSERT INTO ${table} SET ?`, data, (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        })
-    })
-}
+// function insert(table, data) {
+//     return new Promise((resolve, reject) => {
+//         connection.query(`INSERT INTO ${table} SET ?`, data, (err, result) => {
+//             if (err) return reject(err);
+//             resolve(result);
+//         })
+//     })
+// }
+
 // funcion para modificar a la db
 function update(table, data) {
     return new Promise((resolve, reject) => {
@@ -77,13 +77,15 @@ function update(table, data) {
 }
 
 // funcion para modificar a la db
-function upsert(table, data) {
-    if (data && data.id) {
-        return update(table, data);
-    } else {
-        return insert(table, data);
-    }
-}
+const upsert = async (table, payload) => new Promise((resolve, reject) => {
+    connection.query(`INSERT INTO ${table} SET ? ON DUPLICATE KEY UPDATE ?`, [payload, payload], (error, data) => {
+      console.log('UPDATE DATA: ', data)
+      if (error) {
+        return reject(error)
+      }
+      resolve(data)
+    })
+  })
 
 // funcion para buscar en la db
 function query(table, query) {
