@@ -17,6 +17,10 @@ const check = {
         // decodificamos el token
         const decoded = decodeHeader(req)
         console.log(decoded)
+        
+        if (decoded.id !== owner) {
+            throw new Error('No puedes hacer esto');
+        }
     },
 }
 
@@ -55,4 +59,5 @@ function verify(token) {
 
 module.exports = {
     sign,
+    check
 };

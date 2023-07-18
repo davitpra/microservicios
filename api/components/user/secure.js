@@ -10,6 +10,7 @@ module.exports = function checkAuth(action) {
                 const owner = req.body.id;
                 // aqui comprobamos que el usuario sea el mismo
                 auth.check.own(req, owner);
+                next()
                 break;
 
             default:
