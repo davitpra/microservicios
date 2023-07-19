@@ -15,7 +15,7 @@ module.exports = function (injectedStore) {
     // para el login
     async function login(username,password){
         // definimos la data filtrando por el username 
-        const data=await store.query(TABLA, { username })
+        const data = await store.query(TABLA, { username })
 
         // comparamos que sea el mismo password con bcrypt
         if (bcrypt.compare(password, data.password)) {

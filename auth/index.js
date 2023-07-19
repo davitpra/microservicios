@@ -5,7 +5,8 @@ const error = require('../utils/error')
 const secret = config.jwt.secret;
 
 // funcion para firmar un token
-function sign(data) {
+function sign(payload) {
+    const data = JSON.parse(JSON.stringify(payload))
     // firmamos el token con nuestro secreto.
     return jwt.sign(data, secret);
 }
