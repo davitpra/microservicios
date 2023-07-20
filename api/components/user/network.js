@@ -9,6 +9,7 @@ const router = express.Router();
 //ROUTES
 router.get('/', list)
 router.post('/follow/:id', secure('follow'), follow)
+router.get('/:id/following', following);
 router.get('/:id', get)
 router.post('/', upsert)
 router.put('/', secure('update'), upsert)
@@ -49,6 +50,14 @@ async function follow(req, res, next) {
     })
     // los errores se gestionan en el middleware de error
     .catch(next)
+}
+
+function following(req, res, next) {
+	return controller.following(req.params.id)
+		.then( (data) => {
+			return response.success(req, res, data, 200);
+		})
+		.catch(next);
 }
 
 module.exports = router

@@ -67,14 +67,14 @@ function get(table, id) {
 // }
 
 // funcion para modificar a la db
-function update(table, data) {
-    return new Promise((resolve, reject) => {
-        connection.query(`UPDATE ${table} SET ? WHERE id=?`, [data, data.id], (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        })
-    })
-}
+// function update(table, data) {
+//     return new Promise((resolve, reject) => {
+//         connection.query(`UPDATE ${table} SET ? WHERE id=?`, [data, data.id], (err, result) => {
+//             if (err) return reject(err);
+//             resolve(result);
+//         })
+//     })
+// }
 
 // funcion para modificar a la db
 const upsert = async (table, payload) => new Promise((resolve, reject) => {
@@ -88,9 +88,16 @@ const upsert = async (table, payload) => new Promise((resolve, reject) => {
   })
 
 // funcion para buscar en la db
-function query(table, query) {
+function query(table, query, join) {
+    let joinQuery = '';
+    if (join) {
+        const key = Object.keys(join)[0];
+        const val = join[key];
+        joinQuery = `JOIN ${key} ON ${table}.${val} = ${key}.id`;
+    }
+
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM ${table} WHERE ?`, query, (err, res) => {
+        connection.query(`SELECT * FROM ${table} ${joinQuery} WHERE ${table}.?`, query, (err, res) => {
             if (err) return reject(err);
             resolve(res[0] || null);
         })
