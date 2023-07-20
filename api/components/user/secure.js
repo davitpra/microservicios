@@ -13,6 +13,12 @@ module.exports = function checkAuth(action) {
                 next()
                 break;
 
+            case 'follow':
+                // aqui comprobamos que tenga el token
+                auth.check.logged(req);
+                next()
+                break;
+
             default:
                 next();
         }

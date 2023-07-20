@@ -11,10 +11,9 @@ function sign(payload) {
     return jwt.sign(data, secret);
 }
 
-
-
 // funcion para checkear el token.
 const check = {
+    // checkea el sea el mismo token
     own: function(req, owner) {
         // decodificamos el token
         const decoded = decodeHeader(req)
@@ -23,6 +22,12 @@ const check = {
         if (decoded.id !== owner) {
             throw error('No puedes hacer esto', 401 )
         }
+    },
+    
+    //checkea el que tenga un tocken
+    logged: function(req, owner) {
+        // decodificamos el token
+        const decoded = decodeHeader(req)
     },
 }
 

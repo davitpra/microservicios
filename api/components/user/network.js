@@ -8,9 +8,10 @@ const router = express.Router();
 
 //ROUTES
 router.get('/', list)
+router.post('/follow/:id', secure('follow'), follow)
 router.get('/:id', get)
 router.post('/', upsert)
-router.put('/', secure('update') , upsert)
+router.put('/', secure('update'), upsert)
 
 //INTERNAL FUNCTIONS
 function list (req, res, next) {
@@ -36,6 +37,15 @@ function upsert (req, res, next) {
     controller.upsert(req.body)
     .then((user)=> {
         response.success(req, res, user, 201)
+    })
+    // los errores se gestionan en el middleware de error
+    .catch(next)
+}
+
+async function follow(req, res, next) {
+    controller.follow(req.user.Id, req.params.id)
+    .then( data =>{
+        response.success(req,res,data,201)
     })
     // los errores se gestionan en el middleware de error
     .catch(next)
